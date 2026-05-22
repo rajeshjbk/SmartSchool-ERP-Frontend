@@ -1,7 +1,37 @@
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import { useEffect } from "react";
 
 export function Home() {
+  const navigate = useNavigate();
+
   const token = localStorage.getItem("jwtToken");
+  const userRole = localStorage.getItem("userRole");
+
+  useEffect(() => {
+    if (userRole) {
+      switch (userRole) {
+        case "ROLE_ADMIN":
+          navigate("/admin-dashboard");
+          break;
+
+        case "ROLE_TEACHER":
+          navigate("/teacher-dashboard");
+          break;
+
+        case "ROLE_STUDENT":
+          navigate("/student-dashboard");
+          break;
+
+        case "ROLE_PARENT":
+          navigate("/parent-dashboard");
+          break;
+
+        default:
+          console.log("Invalid Role");
+          navigate("/");
+      }
+    }
+  }, [userRole, navigate]);
 
   return (
     <>
@@ -50,7 +80,6 @@ export function Home() {
                   </div>
                 )}
               </div>
-
               <div className="col-lg-6 text-center mt-5 mt-lg-0">
                 <img
                   src="https://cdn-icons-png.flaticon.com/512/3135/3135755.png"

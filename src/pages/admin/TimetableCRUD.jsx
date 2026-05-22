@@ -12,8 +12,9 @@ export function TimetableCRUD() {
   const [teachers, setTeachers] = useState([]);
   const [formData, setFormData] = useState({
     classIds: [],
+    subjectId: "",
     teacherId: "",
-    dayOfWeek: "",
+    dayOfWeek: "MONDAY",
     periodOfTime: "",
     startTime: "",
     endTime: "",
@@ -38,7 +39,6 @@ export function TimetableCRUD() {
 
   useEffect(() => {
     getTimetables();
-
     getClasses();
     getSubjects();
     getTeachers();
@@ -74,7 +74,6 @@ export function TimetableCRUD() {
   };
 
   // Handle Change
-  // Handle Change
   const handleChange = (e) => {
     const { name, value } = e.target;
 
@@ -92,23 +91,6 @@ export function TimetableCRUD() {
         ? prev.classIds.filter((id) => id !== classId)
         : [...prev.classIds, classId],
     }));
-  };
-
-  // Handle Class IDs
-  const handleClassIdsChange = (e) => {
-    const value = e.target.value;
-
-    setClassIdsInput(value);
-
-    const ids = value
-      .split(",")
-      .map((id) => Number(id.trim()))
-      .filter((id) => !isNaN(id));
-
-    setFormData({
-      ...formData,
-      classIds: ids,
-    });
   };
 
   // Add Timetable
@@ -170,8 +152,6 @@ export function TimetableCRUD() {
 
     const ids = timetable.classes?.map((cls) => cls.classId) || [];
 
-    setClassIdsInput(ids.join(", "));
-
     setFormData({
       classIds: ids,
       subjectId: timetable.subject?.subjectId || "",
@@ -195,8 +175,6 @@ export function TimetableCRUD() {
 
     setSelectedTimeTableId(null);
 
-    setClassIdsInput("");
-
     setFormData({
       classIds: [],
       subjectId: "",
@@ -215,6 +193,21 @@ export function TimetableCRUD() {
       item.roomNo?.toLowerCase().includes(search.toLowerCase()) ||
       item.dayOfWeek?.toLowerCase().includes(search.toLowerCase()),
   );
+  // Format Time Function
+  const formatTime = (time) => {
+    if (!time) return "N/A";
+
+    const [hour, minute] = time.split(":");
+
+    const date = new Date();
+    date.setHours(hour, minute);
+
+    return date.toLocaleTimeString("en-US", {
+      hour: "2-digit",
+      minute: "2-digit",
+      hour12: true,
+    });
+  };
 
   return (
     <div className="container mt-4">
@@ -358,14 +351,20 @@ export function TimetableCRUD() {
           <div className="col-md-4 mb-3">
             <label>Room No</label>
 
-            <input
-              type="text"
-              className="form-control"
-              placeholder="Enter Room Number"
+            <select
+              className="form-select"
               name="roomNo"
               value={formData.roomNo}
               onChange={handleChange}
-            />
+            >
+              <option value="">Select Classroom</option>
+
+              {classes.map((cls) => (
+                <option key={cls.classId} value={cls.roomNo}>
+                  Room {cls.roomNo} - {cls.className}
+                </option>
+              ))}
+            </select>
           </div>
 
           <div className="d-flex gap-2 mt-3">
@@ -436,9 +435,9 @@ export function TimetableCRUD() {
 
                   <td>{item.periodOfTime}</td>
 
-                  <td>{item.startTime}</td>
+                  <td>{formatTime(item.startTime)}</td>
 
-                  <td>{item.endTime}</td>
+                  <td>{formatTime(item.endTime)}</td>
 
                   <td>{item.roomNo}</td>
 
