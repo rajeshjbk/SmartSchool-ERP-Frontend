@@ -150,7 +150,7 @@ export function Registration() {
                 >
                   <option value="">Select Role</option>
 
-                  <option value="ROLE_ADMIN">ADMIN</option>
+                  {/*<option value="ROLE_ADMIN">ADMIN</option>*/}
 
                   <option value="ROLE_TEACHER">TEACHER</option>
 
