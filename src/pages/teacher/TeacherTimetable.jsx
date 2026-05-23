@@ -6,7 +6,7 @@ export function TeacherTimetable() {
 
   const [search, setSearch] = useState("");
 
-  const teacherId = localStorage.getItem("userId");
+  const teacherId = localStorage.getItem("teacherId");
 
   // Fetch Timetable
   const getTimetable = async () => {
