@@ -13,7 +13,7 @@ export function ParentAttendance() {
   const getAttendance = async () => {
     try {
       const response = await api.get(
-        `http://localhost:8080/schoolerp/attendance/parent/${parentId}`,
+        `/schoolerp/attendance/parent/${parentId}`,
       );
 
       setAttendance(response.data);

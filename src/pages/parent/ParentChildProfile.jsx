@@ -10,9 +10,7 @@ export function ParentChildProfile() {
 
   const getChildProfile = async () => {
     try {
-      const response = await api.get(
-        `http://localhost:8080/schoolerp/students/parent/${parentId}`,
-      );
+      const response = await api.get(`/schoolerp/students/parent/${parentId}`);
 
       console.log(response.data);
 

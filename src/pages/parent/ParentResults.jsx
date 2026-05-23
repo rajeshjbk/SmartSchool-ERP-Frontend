@@ -15,7 +15,7 @@ export function ParentResults() {
   const getResults = async () => {
     try {
       const response = await api.get(
-        `http://localhost:8080/schoolerp/results/parent/${parentId}`,
+        `/schoolerp/results/parent/${parentId}`,
       );
 
       setResults(response.data);
